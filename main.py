@@ -7,7 +7,7 @@ import os
 import requests
 
 API_TOKEN = ''
-CHANNEL_USERNAME = '@kzn_code'  # Замените на имя вашего канала
+CHANNEL_USERNAME = '@kokobongaclub'  # Замените на имя вашего канала
 
 bot = telebot.TeleBot(API_TOKEN)
 
@@ -92,20 +92,14 @@ def callback_query(call):
                     """)
             try:
                 video_id = 'BAACAgIAAxkBAAMNZ11j0nf9MmL1snDN-AagJE0tfKYAAlhcAAIriOlK88QSgNY4PdY2BA'
-#                 bot.send_video(call.message.chat.id, video_id, caption="""\
-#                 Мы с вами разберем что такое личный бренд, зачем он нужен, а также онлайн и офлайн инструменты для продвижения
-#
-# (Обещанная ссылка на мой курс «Дизайн человека для себя» ⬇️)
-# http://kokobonga.ru/course
-#
-# Следующее видео ты получишь через 24 часа""")
-                bot.send_message(call.message.chat.id, "Урок 1")
+                bot.send_video(call.message.chat.id, video_id, caption="""\
+                Мы с вами разберем что такое личный бренд, зачем он нужен, а также онлайн и офлайн инструменты для продвижения
+(Обещанная ссылка на мой курс «Дизайн человека для себя» ⬇️)
+http://kokobonga.ru/course
+
+Следующее видео ты получишь через 24 часа""")
                 users_dataset[f'{call.message.chat.id}']["secondl"] = 1
-                print(call.message.from_user.id)
-                print(call.message.from_user.is_bot)
                 users_dataset[f'{call.message.chat.id}']["timetoget"]=24*60*60
-                print(f"{users_dataset[f'{call.message.chat.id}']['timetoget']}")
-                print("Changed!")
             except requests.exceptions.ReadTimeout:
                 bot.send_message(call.message.chat.id,
                                  "Произошла ошибка при отправке видео. Пожалуйста, попробуйте позже.")
@@ -118,21 +112,18 @@ def callback_query(call):
             bot.send_message(call.message.chat.id, "Вы не подписались на канал")
     elif call.data=='get_gift':
         bot.send_message(call.message.chat.id,"Ожидай, скоро с тобой свяжемся!")
-        bot.send_message(call.message.chat.id, f"{users_dataset[str(call.message.chat.id)]['user_link']} ({users_dataset[str(call.message.chat.id)]['phone_number']}) нажал на кнопку Получить подарок")
+        bot.send_message(837947302, f"{users_dataset[str(call.message.chat.id)]['user_link']} ({users_dataset[str(call.message.chat.id)]['phone_number']}) нажал на кнопку Получить подарок")
 
 def send_second_video(user_id, chat_id):
     video_id = 'BAACAgIAAxkBAAMUZ11kW64bSDlxkQE-SvGChmMjT-4AAkVZAAIriOlKnfldt_39u0w2BA'  # Замените на путь к вашему локальному видеофайлу для следующего урока
     try:
-#         bot.send_video(user_id, video_id, caption="""\
-#         24 часа прошло, держи следующий урок
-#
-# Разбираем какие трудности могут возникнуть, психологические барьеры и как преодолеть все страхи
-#
-# Последний урок ты получишь так же через 24 часа""")
-        bot.send_message(user_id, "Урок 2")
+        bot.send_video(user_id, video_id, caption="""\
+        24 часа прошло, держи следующий урок
+
+Разбираем какие трудности могут возникнуть, психологические барьеры и как преодолеть все страхи
+
+Последний урок ты получишь так же через 24 часа""")
         users_dataset[f'{chat_id}']["timetoget"] = 24*60*60
-        print(f"{users_dataset[f'{chat_id}']['timetoget']}")
-        print("Changed!")
         with open(USERS_FILE, 'w') as file:
             json.dump(users_dataset, file, indent=4)
     except requests.exceptions.ReadTimeout:
@@ -142,22 +133,20 @@ def send_third_video(user_id, chat_id):
     video_id = 'BAACAgIAAxkBAAMWZ11kc9UlRabdoQeZxrHxJSIbX04AAsFZAAIriOlKdZ7YVSn1NTs2BA'  # Замените на путь к вашему локальному видеофайлу для следующего урока
     bonus_video_id = 'BAACAgIAAxkBAAMYZ11kib8_TyrWZPzmlXGk72hvLjgAAiRZAAIriOlKYTX4pkbCFG02BA'
     try:
-#         bot.send_video(user_id, video_id, caption="""\
-#         24 часа прошло, держи последний урок
-#
-# Снимаем ваши розовые очки: обсуждаем управление личным брендом, ответственность и цели
-# """)
-        bot.send_message(user_id, "Урок 3")
+        bot.send_video(user_id, video_id, caption="""\
+        24 часа прошло, держи последний урок
+
+Снимаем ваши розовые очки: обсуждаем управление личным брендом, ответственность и цели
+""")
     except requests.exceptions.ReadTimeout:
         bot.send_message(user_id, "Произошла ошибка при отправке видео. Пожалуйста, попробуйте позже.")
 
     try:
-        # bot.send_video(user_id, bonus_video_id, caption="""\
-        # Бонусный урок, как и обещала
-        #
-        # Как я развивала личный бренд, как он поменял жизнь моей клиентки
-        # """)
-        bot.send_message(user_id, "Урок 4")
+        bot.send_video(user_id, bonus_video_id, caption="""\
+        Бонусный урок, как и обещала
+
+        Как я развивала личный бренд, как он поменял жизнь моей клиентки
+        """)
         markup = types.InlineKeyboardMarkup()
         button2 = types.InlineKeyboardButton("Получить подарок", callback_data='get_gift')
         markup.add(button2)
@@ -241,10 +230,8 @@ def send_messages_to_all_users():
                 elif users_dataset[f'{key}']["secondl"]==1:
                     send_second_video(users_dataset[f'{key}']["user_id"], users_dataset[f'{key}']["chat_id"])
                     users_dataset[f'{key}']["secondl"]=2
-                    print(f"Second lesson send to {users_dataset[f'{key}']['user_link']}")
                 elif users_dataset[f'{key}']["secondl"]==2:
                     send_third_video(users_dataset[f'{key}']["user_id"], users_dataset[f'{key}']["chat_id"])
-                    print(f"Third lesson send to {users_dataset[f'{key}']['user_link']}")
         with open(USERS_FILE, 'w') as file:
             json.dump(users_dataset, file, indent=4)
         time.sleep(10)
@@ -254,11 +241,8 @@ def minus_time():
         for key in users_dataset.keys():
             if users_dataset[f'{key}']["timetoget"]!=0:
                 users_dataset[f'{key}']["timetoget"]-=10
-            print(f"{users_dataset[f'{key}']['timetoget']}")
-            print("Changed!")
         with open(USERS_FILE, 'w') as file:
             json.dump(users_dataset, file, indent=4)
-            print("Saved")
         time.sleep(10)
 
 threading.Thread(target=send_messages_to_all_users).start()
